@@ -1,6 +1,6 @@
 # About Me 
 
-<img align="right" alt="Anime GIF" src="https://github.com/TetewHeroez/Asisten-things/blob/main/Asisten%20Laboratorium/Alpro%201/PPT/Graphicx/Arisu%20Dance/Arisu%20Dance.gif" width="300"/>
+<img align="right" alt="Anime GIF" src="https://github.com/TetewHeroez/Template-Math-Depart/blob/main/Kita%20Ikuyo%20Doodle/Kita%20Ikuyo%20Doodle.gif" width="300"/>
 
 :star: My name is **Teo**, you can call me **Tetew** instead <br>:m: I'm from Departement of Mathematics, Institut Teknologi Sepuluh Nopember <br>:video_game: My Hobby: 
 - Doing homework use $\LaTeX$
