@@ -1,0 +1,56 @@
+name: Update Voronoi Territory
+
+on:
+  schedule:
+    # 01:17, 07:17, 13:17, 19:17 WIB (UTC+7).
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/generate_territory.py
+      - tests/test_generate_territory.py
+      - .github/workflows/update-territory.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-voronoi-territory
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout profile repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Test generator
+        run: python -m unittest discover -s tests -v
+
+      - name: Generate SVG from GitHub language stats
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+        run: python scripts/generate_territory.py
+
+      - name: Commit SVG if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/voronoi-territory.svg
+          if git diff --cached --quiet; then
+            echo "No language changes; nothing to commit."
+          else
+            git commit -m "chore: refresh language territory"
+            git push origin HEAD:main
+          fi
