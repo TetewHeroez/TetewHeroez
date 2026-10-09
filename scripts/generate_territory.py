@@ -8,7 +8,6 @@ import argparse
 from collections import Counter
 from html import escape
 import json
-import math
 import os
 from pathlib import Path
 import sys
@@ -19,16 +18,20 @@ from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MAX_TERRITORIES = 8
-MAP_HEIGHT = 350 / 912
+MAX_TERRITORIES = 9
+MAP_WIDTH = 700
+MAP_HEIGHT = 264 / MAP_WIDTH
+# GitHub Linguist colours; the layout follows the CC0 Voronoi Territory template.
 COLORS = {
-    "Python": "#7aa2f7", "TeX": "#9ece6a", "JavaScript": "#e0af68",
-    "TypeScript": "#7dcfff", "HTML": "#ff9e64", "CSS": "#bb9af7",
-    "C++": "#f7768e", "C": "#a9b1d6", "Java": "#ff9e64",
-    "Jupyter Notebook": "#e0af68", "Shell": "#73daca", "Other": "#7982a9",
+    "Python": "#3572a5", "TeX": "#3D6117", "JavaScript": "#f1e05a",
+    "TypeScript": "#3178c6", "HTML": "#e34c26", "CSS": "#663399",
+    "C++": "#f34b7d", "C": "#555555", "Java": "#b07219",
+    "Jupyter Notebook": "#DA5B0B", "Shell": "#89e051", "Other": "#7c86b8",
+    "PostScript": "#da291c", "Rust": "#dea584", "Go": "#00ADD8",
+    "Nix": "#7e7eff", "R": "#198CE7", "Ruby": "#701516",
 }
-PALETTE = ("#7aa2f7", "#9ece6a", "#e0af68", "#bb9af7",
-           "#f7768e", "#7dcfff", "#73daca", "#ff9e64")
+PALETTE = ("#3178c6", "#663399", "#f1e05a", "#dea584", "#3572a5",
+           "#00add8", "#89e051", "#e34c26", "#7e7eff")
 
 
 def api_get(path, token=""):
@@ -131,18 +134,21 @@ def fit_territories(shares):
     """Fit power-diagram weights so polygon areas match byte shares.
 
     Each cell uses squared distance minus an additive weight (weighted Voronoi).
-    Coordinate bisection is deterministic and handles very unequal shares.
+    Coordinate bisection fits areas; Lloyd steps keep the cells compact.
     """
     count = len(shares)
     if not count:
         return []
     if count == 1:
         return [[(0, 0), (1, 0), (1, MAP_HEIGHT), (0, MAP_HEIGHT)]]
-    seeds = [(0.5 + 0.38 * math.cos(-0.9 + 2 * math.pi * i / count),
-              MAP_HEIGHT * (0.5 + 0.38 * math.sin(-0.9 + 2 * math.pi * i / count)))
-             for i in range(count)]
+    # Staggered sites mirror the template's composition, with the largest cell
+    # near the centre and smaller cells distributed around it.
+    positions = [(0.405, 0.561), (0.870, 0.596), (0.691, 0.246),
+                 (0.116, 0.713), (0.076, 0.263), (0.668, 0.789),
+                 (0.200, 0.290), (0.420, 0.090), (0.930, 0.120)]
+    seeds = [(x, y * MAP_HEIGHT) for x, y in positions[:count]]
     weights = [0.0] * count
-    for _ in range(300):
+    for iteration in range(360):
         for index, target in enumerate(shares):
             low, high = min(weights) - 2, max(weights) + 2
             for _ in range(32):
@@ -155,7 +161,16 @@ def fit_territories(shares):
         offset = weights[-1]
         weights = [weight - offset for weight in weights]
         polygons = [cell(i, seeds, weights) for i in range(count)]
-        if all(abs(area(polygon) / MAP_HEIGHT - target) < max(1e-8, target * 0.001)
+        # Relax early, then finish with fixed sites to recover precise areas.
+        if iteration < 60:
+            if iteration % 3 == 2:
+                for index, polygon in enumerate(polygons):
+                    if area(polygon) > 1e-12:
+                        cx, cy = centroid(polygon)
+                        x, y = seeds[index]
+                        seeds[index] = (x + (cx - x) * 0.25, y + (cy - y) * 0.25)
+            continue
+        if all(abs(area(polygon) / MAP_HEIGHT - target) < max(1e-8, min(0.0001, target * 0.001))
                for polygon, target in zip(polygons, shares)):
             return polygons
     raise RuntimeError("Weighted Voronoi layout did not converge; existing SVG was preserved.")
@@ -174,6 +189,17 @@ def percent(share):
     return "<0.1%" if share < 0.001 else f"{share:.1%}"
 
 
+def label_ink(color):
+    """Choose readable ink against the cell colour composited on the ground."""
+    ground = (11, 15, 22)
+    channels = [(int(color[i:i + 2], 16) * .85 + background * .15) / 255
+                for i, background in zip((1, 3, 5), ground)]
+    linear = [value / 12.92 if value <= .04045 else ((value + .055) / 1.055) ** 2.4
+              for value in channels]
+    luminance = sum(value * factor for value, factor in zip(linear, (.2126, .7152, .0722)))
+    return "#0b0f16" if luminance > .18 else "#f4f7ff"
+
+
 def render_svg(username, totals, repository_count=None):
     entries = language_shares(totals)
     polygons = fit_territories([share for _, share in entries])
@@ -181,57 +207,60 @@ def render_svg(username, totals, repository_count=None):
     summary = ", ".join(f"{escape(name)} {escape(percent(share))}" for name, share in entries)
     repo_label = "Public repositories" if repository_count is None else f"{repository_count} public repositories"
     parts = [
-        '<svg xmlns="http://www.w3.org/2000/svg" width="960" height="650" viewBox="0 0 960 650" role="img" aria-labelledby="title desc">',
-        f'<title id="title">{owner} — Programming Language Territory</title>',
-        f'<desc id="desc">Weighted Voronoi diagram of language bytes in public, non-fork repositories. {summary or "No language data available."}</desc>',
-        '<defs><clipPath id="map"><rect x="24" y="112" width="912" height="350" rx="14"/></clipPath></defs>',
-        '<style>text{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}.muted{fill:#a9b1d6}.label{fill:#c0caf5;font-size:14px}.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}</style>',
-        '<rect x="1" y="1" width="958" height="648" rx="22" fill="#1a1b26" stroke="#414868"/>',
-        '<circle cx="32" cy="31" r="4" fill="#9ece6a"/>',
-        '<text x="46" y="35" fill="#7aa2f7" font-size="11" letter-spacing="2" class="mono">LANGUAGE TERRITORY</text>',
-        '<text x="24" y="77" fill="#c0caf5" font-size="29" font-weight="700">My coding territory</text>',
-        f'<text x="24" y="98" class="muted" font-size="12">{owner} / {repo_label} / {len([v for v in totals.values() if v])} languages</text>',
-        '<text x="934" y="35" text-anchor="end" class="muted mono" font-size="11">VORONOI / BYTE SHARE</text>',
-        '<rect x="24" y="112" width="912" height="350" rx="14" fill="#24283b"/>',
-        '<g clip-path="url(#map)">',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">',
+        f'<title id="title">{owner} — Voronoi Territory</title>',
+        f'<desc id="desc">Weighted Voronoi diagram of language bytes. {repo_label}, forks excluded. {summary or "No language data available."}</desc>',
+        '<!-- Layout adapted from beydemirfurkan/awesome-github-profile: Voronoi Territory (CC0). -->',
+        '<style>text{font-family:ui-monospace,Menlo,Consolas,monospace}</style>',
+        '<rect width="1200" height="420" fill="#0b0f16"/>',
+        '<text x="72" y="60" style="font-family:system-ui,-apple-system,Segoe UI,sans-serif" font-size="25" font-weight="700" fill="#e8ecff">Territory</text>',
+        f'<text x="72" y="82" font-size="10" fill="#7c86b8" letter-spacing="4">WHAT {escape(username.upper())} ACTUALLY WRITES · AREA = SHARE</text>',
+        '<g id="territories">',
     ]
     for index, ((name, share), polygon) in enumerate(zip(entries, polygons)):
         color = COLORS.get(name, PALETTE[index % len(PALETTE)])
-        points = " ".join(f"{24 + x * 912:.3f},{112 + y * 912:.3f}" for x, y in polygon)
-        parts.append(f'<polygon points="{points}" fill="{color}" fill-opacity="0.22" stroke="{color}" stroke-width="1.5" stroke-linejoin="round"><title>{escape(name)}: {escape(percent(share))}</title></polygon>')
+        points = " ".join(f"{72 + x * MAP_WIDTH:.3f},{96 + y * MAP_WIDTH:.3f}" for x, y in polygon)
+        parts.append(f'<polygon points="{points}" fill="{color}" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>{escape(name)}: {escape(percent(share))}</title></polygon>')
         # Keep small/narrow territories readable through the complete legend.
         if area(polygon) < 1e-12:
             continue
         cx, cy = centroid(polygon)
-        label_width = max(len(name) * 8, 78) / 912
-        label_height = 40 / 912
+        label_width = max(len(name) * 7.5, 52) / MAP_WIDTH
+        label_height = 36 / MAP_WIDTH
         corners = [(cx + dx * label_width / 2, cy + dy * label_height / 2)
                    for dx in (-1, 1) for dy in (-1, 1)]
         def inside(point):
             return all((q[0] - p[0]) * (point[1] - p[1])
                        - (q[1] - p[1]) * (point[0] - p[0]) >= -1e-10
                        for p, q in zip(polygon, polygon[1:] + polygon[:1]))
-        if all(inside(point) for point in corners):
-            x, y = 24 + cx * 912, 112 + cy * 912
+        if share >= .06 and all(inside(point) for point in corners):
+            x, y = 72 + cx * MAP_WIDTH, 96 + cy * MAP_WIDTH
+            ink = label_ink(color)
             parts.extend([
-                f'<text x="{x:.2f}" y="{y - 4:.2f}" text-anchor="middle" fill="{color}" font-size="15" font-weight="600">{escape(name)}</text>',
-                f'<text x="{x:.2f}" y="{y + 17:.2f}" text-anchor="middle" fill="#c0caf5" font-size="18" class="mono">{escape(percent(share))}</text>',
+                f'<text x="{x:.2f}" y="{y:.2f}" text-anchor="middle" fill="{ink}" font-size="12" font-weight="700">{escape(name)}</text>',
+                f'<text x="{x:.2f}" y="{y + 17:.2f}" text-anchor="middle" fill="{ink}" font-size="11" opacity="0.7">{escape(percent(share))}</text>',
             ])
     parts.append('</g>')
     if not entries:
-        parts.append('<text x="480" y="290" text-anchor="middle" class="muted" font-size="18">No public language data yet</text>')
+        parts.append('<text x="422" y="228" text-anchor="middle" fill="#7c86b8" font-size="14">No public language data yet</text>')
+    parts.extend([
+        '<g id="legend">',
+        '<text x="836" y="80" font-size="10" fill="#7c86b8" letter-spacing="4">BY AREA</text>',
+        '<line x1="836" y1="92" x2="1128" y2="92" stroke="#1e2637"/>',
+    ])
     for index, (name, share) in enumerate(entries):
-        x, y = 32 + (index % 4) * 228, 497 + (index // 4) * 57
+        y = 126 + index * 28
         color = COLORS.get(name, PALETTE[index % len(PALETTE)])
         parts.extend([
-            f'<rect x="{x}" y="{y - 10}" width="8" height="8" rx="2" fill="{color}"/>',
-            f'<text x="{x + 17}" y="{y}" class="label">{escape(name)}</text>',
-            f'<text x="{x + 17}" y="{y + 21}" fill="{color}" font-size="14" class="mono">{escape(percent(share))}</text>',
+            f'<rect x="836" y="{y - 10}" width="12" height="12" rx="2" fill="{color}"/>',
+            f'<text x="860" y="{y}" font-size="12" fill="#c8d2e8">{escape(name)}</text>',
+            f'<text x="1128" y="{y}" text-anchor="end" font-size="12" fill="#7c86b8">{escape(percent(share))}</text>',
         ])
     parts.extend([
-        '<path d="M24 600H936" stroke="#414868"/>',
-        '<text x="24" y="627" class="muted" font-size="11">Area follows code bytes · Public repos only · Forks excluded</text>',
-        '<text x="936" y="627" text-anchor="end" class="muted mono" font-size="11">REFRESH / 6H</text>',
+        '</g>',
+        '<line x1="72" y1="384" x2="1128" y2="384" stroke="#1e2637"/>',
+        '<text x="72" y="404" font-size="9.5" fill="#4d5578" letter-spacing="2.5">POWER DIAGRAM · WEIGHTS SOLVED SO AREA MATCHES SHARE</text>',
+        f'<text x="1128" y="404" text-anchor="end" font-size="9.5" fill="#4d5578" letter-spacing="2.5">{escape(username.upper())}</text>',
         '</svg>',
     ])
     return "\n".join(parts) + "\n"

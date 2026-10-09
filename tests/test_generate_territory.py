@@ -16,10 +16,10 @@ class LanguageTests(unittest.TestCase):
     def test_top_languages_keep_all_bytes(self):
         totals = {f"Language {i}": i for i in range(1, 13)}
         entries = territory.language_shares(totals)
-        self.assertEqual(len(entries), 8)
+        self.assertEqual(len(entries), 9)
         self.assertEqual(entries[0][0], "Language 12")
         self.assertEqual(entries[-1][0], "Other")
-        self.assertAlmostEqual(entries[-1][1], sum(range(1, 6)) / sum(range(1, 13)))
+        self.assertAlmostEqual(entries[-1][1], sum(range(1, 5)) / sum(range(1, 13)))
         self.assertAlmostEqual(sum(share for _, share in entries), 1)
 
     def test_invalid_byte_counts_are_rejected(self):
@@ -67,10 +67,10 @@ class LanguageTests(unittest.TestCase):
 class GeometryTests(unittest.TestCase):
     def test_areas_follow_language_shares_without_gaps(self):
         rng = random.Random(42)
-        cases = [[1], [.5, .5], [.999999, .000001], [1/8] * 8,
+        cases = [[1], [.5, .5], [.999999, .000001], [1/9] * 9,
                  [.99, .004, .002, .001, .001, .001, .0009, .0001]]
         for _ in range(15):
-            sizes = [10 ** rng.uniform(-3, 3) for _ in range(rng.randint(2, 8))]
+            sizes = [10 ** rng.uniform(-3, 3) for _ in range(rng.randint(2, 9))]
             cases.append([size / sum(sizes) for size in sizes])
         for shares in cases:
             with self.subTest(shares=shares):
@@ -99,6 +99,27 @@ class GeometryTests(unittest.TestCase):
         ET.fromstring(svg)
         self.assertIn("No public language data yet", svg)
         self.assertNotIn("<polygon", svg)
+
+    def test_template_layout_has_nine_cells_and_a_right_hand_legend(self):
+        totals = {"TypeScript": 31, "CSS": 19, "JavaScript": 13, "Rust": 10,
+                  "Python": 8, "Go": 7, "Shell": 5, "HTML": 4, "Nix": 3}
+        root = ET.fromstring(territory.render_svg("Teo", totals))
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        self.assertEqual(root.attrib["viewBox"], "0 0 1200 420")
+        legend = root.find("s:g[@id='legend']", ns)
+        self.assertIsNotNone(legend)
+        rows = legend.findall("s:text[@x='860']", ns)
+        self.assertEqual([row.text for row in rows], list(totals))
+        polygons = root.findall(".//s:polygon", ns)
+        self.assertEqual(len(polygons), 9)
+        self.assertEqual(polygons[0].attrib["fill"], "#3178c6")
+        self.assertEqual(territory.label_ink("#f1e05a"), "#0b0f16")
+        self.assertEqual(territory.label_ink("#3572a5"), "#f4f7ff")
+        for polygon in polygons:
+            for point in polygon.attrib["points"].split():
+                x, y = map(float, point.split(","))
+                self.assertTrue(72 <= x <= 772)
+                self.assertTrue(96 <= y <= 360)
 
     def test_cli_keeps_existing_svg_on_failure_and_avoids_rewrites(self):
         with tempfile.TemporaryDirectory(dir=territory.ROOT) as directory:
