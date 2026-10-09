@@ -44,8 +44,11 @@ python -m unittest discover -s tests -v
 API and workflow reference: [GitHub repository endpoints](https://docs.github.com/en/rest/repos/repos)
 and [workflow triggers](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows).
 
-The 1200 × 420 canvas, left-hand map, right-hand legend, typography and palette
-follow the [Voronoi Territory template](https://github.com/beydemirfurkan/awesome-github-profile/tree/main/templates/12-generative/voronoi-territory)
-by beydemirfurkan, released under CC0. Language colours come from GitHub Linguist;
+The left-hand map, right-hand legend, typography and palette follow the
+[Voronoi Territory template](https://github.com/beydemirfurkan/awesome-github-profile/tree/main/templates/12-generative/voronoi-territory)
+by beydemirfurkan, released under CC0. The compact 1056 × 296 canvas uses 16px
+outer padding and a 32px gap between map and legend. The visible title, subtitle
+and footer are omitted because the README already introduces the chart.
+Language colours come from GitHub Linguist;
 the cells and percentages are regenerated from this account's own statistics,
 so their shapes differ from the template's sample data.

@@ -19,8 +19,14 @@ from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 MAX_TERRITORIES = 9
+MAP_X = 16
+MAP_Y = 16
 MAP_WIDTH = 700
 MAP_HEIGHT = 264 / MAP_WIDTH
+LEGEND_X = MAP_X + MAP_WIDTH + 32
+LEGEND_RIGHT = LEGEND_X + 292
+SVG_WIDTH = LEGEND_RIGHT + 16
+SVG_HEIGHT = 296
 # GitHub Linguist colours; the layout follows the CC0 Voronoi Territory template.
 COLORS = {
     "Python": "#3572a5", "TeX": "#3D6117", "JavaScript": "#f1e05a",
@@ -207,19 +213,17 @@ def render_svg(username, totals, repository_count=None):
     summary = ", ".join(f"{escape(name)} {escape(percent(share))}" for name, share in entries)
     repo_label = "Public repositories" if repository_count is None else f"{repository_count} public repositories"
     parts = [
-        '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">',
-        f'<title id="title">{owner} — Voronoi Territory</title>',
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{SVG_WIDTH}" height="{SVG_HEIGHT}" viewBox="0 0 {SVG_WIDTH} {SVG_HEIGHT}" role="img" aria-labelledby="title desc">',
+        f'<title id="title">{owner} — Programming languages</title>',
         f'<desc id="desc">Weighted Voronoi diagram of language bytes. {repo_label}, forks excluded. {summary or "No language data available."}</desc>',
         '<!-- Layout adapted from beydemirfurkan/awesome-github-profile: Voronoi Territory (CC0). -->',
         '<style>text{font-family:ui-monospace,Menlo,Consolas,monospace}</style>',
-        '<rect width="1200" height="420" fill="#0b0f16"/>',
-        '<text x="72" y="60" style="font-family:system-ui,-apple-system,Segoe UI,sans-serif" font-size="25" font-weight="700" fill="#e8ecff">Territory</text>',
-        f'<text x="72" y="82" font-size="10" fill="#7c86b8" letter-spacing="4">WHAT {escape(username.upper())} ACTUALLY WRITES · AREA = SHARE</text>',
+        f'<rect width="{SVG_WIDTH}" height="{SVG_HEIGHT}" fill="#0b0f16"/>',
         '<g id="territories">',
     ]
     for index, ((name, share), polygon) in enumerate(zip(entries, polygons)):
         color = COLORS.get(name, PALETTE[index % len(PALETTE)])
-        points = " ".join(f"{72 + x * MAP_WIDTH:.3f},{96 + y * MAP_WIDTH:.3f}" for x, y in polygon)
+        points = " ".join(f"{MAP_X + x * MAP_WIDTH:.3f},{MAP_Y + y * MAP_WIDTH:.3f}" for x, y in polygon)
         parts.append(f'<polygon points="{points}" fill="{color}" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>{escape(name)}: {escape(percent(share))}</title></polygon>')
         # Keep small/narrow territories readable through the complete legend.
         if area(polygon) < 1e-12:
@@ -234,7 +238,7 @@ def render_svg(username, totals, repository_count=None):
                        - (q[1] - p[1]) * (point[0] - p[0]) >= -1e-10
                        for p, q in zip(polygon, polygon[1:] + polygon[:1]))
         if share >= .06 and all(inside(point) for point in corners):
-            x, y = 72 + cx * MAP_WIDTH, 96 + cy * MAP_WIDTH
+            x, y = MAP_X + cx * MAP_WIDTH, MAP_Y + cy * MAP_WIDTH
             ink = label_ink(color)
             parts.extend([
                 f'<text x="{x:.2f}" y="{y:.2f}" text-anchor="middle" fill="{ink}" font-size="12" font-weight="700">{escape(name)}</text>',
@@ -242,25 +246,22 @@ def render_svg(username, totals, repository_count=None):
             ])
     parts.append('</g>')
     if not entries:
-        parts.append('<text x="422" y="228" text-anchor="middle" fill="#7c86b8" font-size="14">No public language data yet</text>')
+        parts.append(f'<text x="{MAP_X + MAP_WIDTH / 2:g}" y="{MAP_Y + MAP_HEIGHT * MAP_WIDTH / 2:g}" text-anchor="middle" fill="#7c86b8" font-size="14">No public language data yet</text>')
     parts.extend([
         '<g id="legend">',
-        '<text x="836" y="80" font-size="10" fill="#7c86b8" letter-spacing="4">BY AREA</text>',
-        '<line x1="836" y1="92" x2="1128" y2="92" stroke="#1e2637"/>',
+        f'<text x="{LEGEND_X}" y="24" font-size="10" fill="#7c86b8" letter-spacing="4">BY AREA</text>',
+        f'<line x1="{LEGEND_X}" y1="36" x2="{LEGEND_RIGHT}" y2="36" stroke="#1e2637"/>',
     ])
     for index, (name, share) in enumerate(entries):
-        y = 126 + index * 28
+        y = 58 + index * 28
         color = COLORS.get(name, PALETTE[index % len(PALETTE)])
         parts.extend([
-            f'<rect x="836" y="{y - 10}" width="12" height="12" rx="2" fill="{color}"/>',
-            f'<text x="860" y="{y}" font-size="12" fill="#c8d2e8">{escape(name)}</text>',
-            f'<text x="1128" y="{y}" text-anchor="end" font-size="12" fill="#7c86b8">{escape(percent(share))}</text>',
+            f'<rect x="{LEGEND_X}" y="{y - 10}" width="12" height="12" rx="2" fill="{color}"/>',
+            f'<text x="{LEGEND_X + 24}" y="{y}" font-size="12" fill="#c8d2e8">{escape(name)}</text>',
+            f'<text x="{LEGEND_RIGHT}" y="{y}" text-anchor="end" font-size="12" fill="#7c86b8">{escape(percent(share))}</text>',
         ])
     parts.extend([
         '</g>',
-        '<line x1="72" y1="384" x2="1128" y2="384" stroke="#1e2637"/>',
-        '<text x="72" y="404" font-size="9.5" fill="#4d5578" letter-spacing="2.5">POWER DIAGRAM · WEIGHTS SOLVED SO AREA MATCHES SHARE</text>',
-        f'<text x="1128" y="404" text-anchor="end" font-size="9.5" fill="#4d5578" letter-spacing="2.5">{escape(username.upper())}</text>',
         '</svg>',
     ])
     return "\n".join(parts) + "\n"

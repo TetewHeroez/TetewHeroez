@@ -19,7 +19,7 @@
 
 <!-- Proudly created with GPRM ( https://gprm.itsvg.in ) -->
 
-<h2 align="center">My Coding Territory</h2>
+<h2>My Coding Territory</h2>
 
 <p align="center">
   <img src="./assets/voronoi-territory.svg" alt="Programming language territory based on code bytes in my public repositories, excluding forks" width="100%" />

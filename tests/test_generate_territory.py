@@ -111,10 +111,10 @@ class GeometryTests(unittest.TestCase):
                   "Python": 8, "Go": 7, "Shell": 5, "HTML": 4, "Nix": 3}
         root = ET.fromstring(territory.render_svg("Teo", totals))
         ns = {"s": "http://www.w3.org/2000/svg"}
-        self.assertEqual(root.attrib["viewBox"], "0 0 1200 420")
+        self.assertEqual(root.attrib["viewBox"], "0 0 1056 296")
         legend = root.find("s:g[@id='legend']", ns)
         self.assertIsNotNone(legend)
-        rows = legend.findall("s:text[@x='860']", ns)
+        rows = legend.findall("s:text[@x='772']", ns)
         self.assertEqual([row.text for row in rows], list(totals))
         polygons = root.findall(".//s:polygon", ns)
         self.assertEqual(len(polygons), 9)
@@ -124,8 +124,8 @@ class GeometryTests(unittest.TestCase):
         for polygon in polygons:
             for point in polygon.attrib["points"].split():
                 x, y = map(float, point.split(","))
-                self.assertTrue(72 <= x <= 772)
-                self.assertTrue(96 <= y <= 360)
+                self.assertTrue(16 <= x <= 716)
+                self.assertTrue(16 <= y <= 280)
 
     def test_cli_keeps_existing_svg_on_failure_and_avoids_rewrites(self):
         with tempfile.TemporaryDirectory(dir=territory.ROOT) as directory:
