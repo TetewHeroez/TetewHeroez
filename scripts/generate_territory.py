@@ -74,10 +74,10 @@ def fetch_languages(username, token=""):
             token,
         )
         for repo in repositories:
-            if (repo["fork"] or repo["private"]
+            if (repo["private"]
                     or repo["owner"]["login"].casefold() != username.casefold()):
                 continue
-            # Archived repositories still represent the owner's public code.
+            # Include forks and archived repositories owned by this user.
             full_name = quote(repo["full_name"], safe="/")
             totals.update(api_get(f"/repos/{full_name}/languages", token))
             repository_count += 1
@@ -215,7 +215,7 @@ def render_svg(username, totals, repository_count=None):
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{SVG_WIDTH}" height="{SVG_HEIGHT}" viewBox="0 0 {SVG_WIDTH} {SVG_HEIGHT}" role="img" aria-labelledby="title desc">',
         f'<title id="title">{owner} — Programming languages</title>',
-        f'<desc id="desc">Weighted Voronoi diagram of language bytes. {repo_label}, forks excluded. {summary or "No language data available."}</desc>',
+        f'<desc id="desc">Weighted Voronoi diagram of language bytes. {repo_label}, forks included. {summary or "No language data available."}</desc>',
         '<!-- Layout adapted from beydemirfurkan/awesome-github-profile: Voronoi Territory (CC0). -->',
         '<style>text{font-family:ui-monospace,Menlo,Consolas,monospace}</style>',
         f'<rect width="{SVG_WIDTH}" height="{SVG_HEIGHT}" fill="#0b0f16"/>',

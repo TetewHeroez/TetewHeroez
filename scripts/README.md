@@ -10,9 +10,11 @@ There are no third-party dependencies. On Windows, use `py` if `python` is
 unavailable. `GH_TOKEN` is optional locally and increases the GitHub API quota;
 GitHub Actions uses its built-in `GITHUB_TOKEN`.
 
-The generator paginates all public repositories owned by the user, excludes
-forks and private repositories, and sums the language byte counts returned by
-GitHub. Archived repositories are included. These are byte shares, not commit
+The generator paginates all public repositories owned by the user, including
+forks, and sums the language byte counts returned by GitHub. Private repositories
+are excluded; archived repositories are included. Forks contribute all language
+bytes reported by GitHub, including code inherited from the original repository.
+These are byte shares, not commit
 counts or measures of proficiency. If there are more than nine languages, the
 eight largest appear individually and the rest form `Other`.
 

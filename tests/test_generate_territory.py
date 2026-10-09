@@ -28,7 +28,7 @@ class LanguageTests(unittest.TestCase):
                 territory.language_shares(totals)
         self.assertEqual(territory.language_shares({"Python": 0}), [])
 
-    def test_pagination_filters_forks_private_and_other_owners(self):
+    def test_pagination_includes_forks_and_filters_private_and_other_owners(self):
         def repo(name, **changes):
             return dict(full_name=f"Teo/{name}", owner={"login": "Teo"},
                         fork=False, private=False, **changes)
@@ -38,15 +38,17 @@ class LanguageTests(unittest.TestCase):
         private = {**repo("private"), "private": True}
         outsider = {**repo("outside"), "owner": {"login": "someone-else"}}
         # 100 entries forces a second page; ignored repos must never be queried.
-        first_page = [public, private, outsider] + [fork] * 97
+        first_page = [public, fork, outsider] + [private] * 97
         with patch.object(territory, "api_get", side_effect=[
-            first_page, {"Python": 30, "TeX": 20}, [repo("archived", archived=True)],
+            first_page, {"Python": 30, "TeX": 20}, {"Python": 5, "JavaScript": 15},
+            [repo("archived", archived=True)],
             {"Python": 10},
         ]) as api:
             totals, count = territory.fetch_languages("teo", "test-token")
-        self.assertEqual(totals, {"Python": 40, "TeX": 20})
-        self.assertEqual(count, 2)
-        self.assertIn("page=2", api.call_args_list[2].args[0])
+        self.assertEqual(totals, {"Python": 45, "TeX": 20, "JavaScript": 15})
+        self.assertEqual(count, 3)
+        self.assertEqual(api.call_args_list[2].args[0], "/repos/Teo/fork/languages")
+        self.assertIn("page=2", api.call_args_list[3].args[0])
         self.assertTrue(all(call.args[1] == "test-token" for call in api.call_args_list))
 
     def test_api_failure_does_not_return_partial_totals(self):
@@ -97,6 +99,7 @@ class GeometryTests(unittest.TestCase):
         ns = {"s": "http://www.w3.org/2000/svg"}
         self.assertEqual(len(root.findall(".//s:polygon", ns)), 2)
         self.assertIn("C++ & <script>", root.find("s:desc", ns).text)
+        self.assertIn("forks included", root.find("s:desc", ns).text)
         self.assertEqual(root.findall(".//s:script", ns), [])
         self.assertNotIn("nan", svg.lower())
 
