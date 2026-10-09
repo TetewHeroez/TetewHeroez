@@ -8,6 +8,7 @@ on:
   push:
     branches: [main]
     paths:
+      - assets/voronoi-territory.svg
       - scripts/generate_territory.py
       - tests/test_generate_territory.py
       - .github/workflows/update-territory.yml

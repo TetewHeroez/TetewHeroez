@@ -65,6 +65,12 @@ class LanguageTests(unittest.TestCase):
 
 
 class GeometryTests(unittest.TestCase):
+    def test_committed_svg_is_valid(self):
+        # Test the actual README asset, so committed merge markers or malformed
+        # XML cannot pass just because the generator itself still works.
+        root = ET.parse(territory.ROOT / "assets" / "voronoi-territory.svg").getroot()
+        self.assertEqual(root.tag, "{http://www.w3.org/2000/svg}svg")
+
     def test_areas_follow_language_shares_without_gaps(self):
         rng = random.Random(42)
         cases = [[1], [.5, .5], [.999999, .000001], [1/9] * 9,
