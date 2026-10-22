@@ -1,6 +1,6 @@
 # About Me 
 
-<img align="right" alt="Anime GIF" src="https://github.com/TetewHeroez/Template-Math-Depart/blob/main/Kita%20Ikuyo%20Doodle/Kita%20Ikuyo%20Doodle.gif" width="300"/>
+<img align="right" alt="Anime GIF" src="https://github.com/TetewHeroez/GIF-List/blob/main/Kita%20Ikuyo%20Doodle/Kita%20Ikuyo%20Doodle.gif" width="300"/>
 
 I'm **Teo**, also known as **Tetew**, a mathematics graduate from **Institut Teknologi Sepuluh Nopember** with a thorough understanding of the material covered in all required mathematics courses. I enjoy solving mathematical problems and turning complex ideas into clear, well-structured explanations.
 
