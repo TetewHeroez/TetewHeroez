@@ -1,33 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1056" height="296" viewBox="0 0 1056 296" role="img" aria-labelledby="title desc">
 <title id="title">TetewHeroez — Programming languages</title>
-<desc id="desc">Weighted Voronoi diagram of language bytes. 16 public repositories, forks included. TeX 75.7%, Jupyter Notebook 22.0%, TypeScript 0.6%, JavaScript 0.6%, Python 0.5%, Java 0.3%, PostScript 0.2%, HTML 0.1%, Other &lt;0.1%</desc>
+<desc id="desc">Weighted Voronoi diagram of language bytes. 16 public repositories, forks included. TeX 75.8%, Jupyter Notebook 21.9%, TypeScript 0.6%, JavaScript 0.6%, Python 0.4%, Java 0.3%, PostScript 0.2%, HTML 0.1%, Other &lt;0.1%</desc>
 <!-- Layout adapted from beydemirfurkan/awesome-github-profile: Voronoi Territory (CC0). -->
 <style>text{font-family:ui-monospace,Menlo,Consolas,monospace}</style>
 <rect width="1056" height="296" fill="#0b0f16"/>
 <g id="territories">
-<polygon points="16.000,206.197 16.000,96.008 39.487,31.817 47.186,16.000 541.987,16.000 553.990,41.198 557.004,48.379 555.350,258.609 545.613,280.000 45.946,280.000" fill="#3D6117" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>TeX: 75.7%</title></polygon>
-<text x="289.71" y="148.08" text-anchor="middle" fill="#f4f7ff" font-size="12" font-weight="700">TeX</text>
-<text x="289.71" y="165.08" text-anchor="middle" fill="#f4f7ff" font-size="11" opacity="0.7">75.7%</text>
-<polygon points="555.350,258.609 557.004,48.379 622.506,16.000 691.380,16.000 716.000,29.159 716.000,280.000 590.200,280.000" fill="#DA5B0B" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Jupyter Notebook: 22.0%</title></polygon>
-<text x="637.95" y="150.81" text-anchor="middle" fill="#f4f7ff" font-size="12" font-weight="700">Jupyter Notebook</text>
-<text x="637.95" y="167.81" text-anchor="middle" fill="#f4f7ff" font-size="11" opacity="0.7">22.0%</text>
-<polygon points="557.004,48.379 553.990,41.198 557.199,16.000 622.506,16.000" fill="#3178c6" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>TypeScript: 0.6%</title></polygon>
-<polygon points="16.000,206.197 45.946,280.000 16.000,280.000" fill="#f1e05a" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>JavaScript: 0.6%</title></polygon>
-<polygon points="39.487,31.817 16.000,96.008 16.000,25.177" fill="#3572a5" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Python: 0.5%</title></polygon>
-<polygon points="555.350,258.609 590.200,280.000 545.613,280.000" fill="#b07219" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Java: 0.3%</title></polygon>
-<polygon points="39.487,31.817 16.000,25.177 16.000,16.000 47.186,16.000" fill="#da291c" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>PostScript: 0.2%</title></polygon>
-<polygon points="553.990,41.198 541.987,16.000 557.199,16.000" fill="#e34c26" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>HTML: 0.1%</title></polygon>
-<polygon points="691.380,16.000 716.000,16.000 716.000,29.159" fill="#7c86b8" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Other: &lt;0.1%</title></polygon>
+<polygon points="16.000,206.246 16.000,95.953 39.466,31.804 47.154,16.000 542.284,16.000 554.282,41.202 557.265,48.314 555.606,258.642 545.888,280.000 45.916,280.000" fill="#3D6117" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>TeX: 75.8%</title></polygon>
+<text x="289.84" y="148.08" text-anchor="middle" fill="#f4f7ff" font-size="12" font-weight="700">TeX</text>
+<text x="289.84" y="165.08" text-anchor="middle" fill="#f4f7ff" font-size="11" opacity="0.7">75.8%</text>
+<polygon points="555.606,258.642 557.265,48.314 622.829,16.000 691.292,16.000 716.000,29.177 716.000,280.000 590.469,280.000" fill="#DA5B0B" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Jupyter Notebook: 21.9%</title></polygon>
+<text x="638.07" y="150.81" text-anchor="middle" fill="#f4f7ff" font-size="12" font-weight="700">Jupyter Notebook</text>
+<text x="638.07" y="167.81" text-anchor="middle" fill="#f4f7ff" font-size="11" opacity="0.7">21.9%</text>
+<polygon points="557.265,48.314 554.282,41.202 557.468,16.000 622.829,16.000" fill="#3178c6" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>TypeScript: 0.6%</title></polygon>
+<polygon points="16.000,206.246 45.916,280.000 16.000,280.000" fill="#f1e05a" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>JavaScript: 0.6%</title></polygon>
+<polygon points="39.466,31.804 16.000,95.953 16.000,25.174" fill="#3572a5" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Python: 0.4%</title></polygon>
+<polygon points="555.606,258.642 590.469,280.000 545.888,280.000" fill="#b07219" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Java: 0.3%</title></polygon>
+<polygon points="39.466,31.804 16.000,25.174 16.000,16.000 47.154,16.000" fill="#da291c" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>PostScript: 0.2%</title></polygon>
+<polygon points="554.282,41.202 542.284,16.000 557.468,16.000" fill="#e34c26" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>HTML: 0.1%</title></polygon>
+<polygon points="691.292,16.000 716.000,16.000 716.000,29.177" fill="#7c86b8" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Other: &lt;0.1%</title></polygon>
 </g>
 <g id="legend">
 <text x="748" y="24" font-size="10" fill="#7c86b8" letter-spacing="4">BY AREA</text>
 <line x1="748" y1="36" x2="1040" y2="36" stroke="#1e2637"/>
 <rect x="748" y="48" width="12" height="12" rx="2" fill="#3D6117"/>
 <text x="772" y="58" font-size="12" fill="#c8d2e8">TeX</text>
-<text x="1040" y="58" text-anchor="end" font-size="12" fill="#7c86b8">75.7%</text>
+<text x="1040" y="58" text-anchor="end" font-size="12" fill="#7c86b8">75.8%</text>
 <rect x="748" y="76" width="12" height="12" rx="2" fill="#DA5B0B"/>
 <text x="772" y="86" font-size="12" fill="#c8d2e8">Jupyter Notebook</text>
-<text x="1040" y="86" text-anchor="end" font-size="12" fill="#7c86b8">22.0%</text>
+<text x="1040" y="86" text-anchor="end" font-size="12" fill="#7c86b8">21.9%</text>
 <rect x="748" y="104" width="12" height="12" rx="2" fill="#3178c6"/>
 <text x="772" y="114" font-size="12" fill="#c8d2e8">TypeScript</text>
 <text x="1040" y="114" text-anchor="end" font-size="12" fill="#7c86b8">0.6%</text>
@@ -36,7 +36,7 @@
 <text x="1040" y="142" text-anchor="end" font-size="12" fill="#7c86b8">0.6%</text>
 <rect x="748" y="160" width="12" height="12" rx="2" fill="#3572a5"/>
 <text x="772" y="170" font-size="12" fill="#c8d2e8">Python</text>
-<text x="1040" y="170" text-anchor="end" font-size="12" fill="#7c86b8">0.5%</text>
+<text x="1040" y="170" text-anchor="end" font-size="12" fill="#7c86b8">0.4%</text>
 <rect x="748" y="188" width="12" height="12" rx="2" fill="#b07219"/>
 <text x="772" y="198" font-size="12" fill="#c8d2e8">Java</text>
 <text x="1040" y="198" text-anchor="end" font-size="12" fill="#7c86b8">0.3%</text>
