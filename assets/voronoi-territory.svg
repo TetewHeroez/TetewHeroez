@@ -5,19 +5,19 @@
 <style>text{font-family:ui-monospace,Menlo,Consolas,monospace}</style>
 <rect width="1056" height="296" fill="#0b0f16"/>
 <g id="territories">
-<polygon points="16.000,206.246 16.000,95.953 39.466,31.804 47.154,16.000 542.284,16.000 554.282,41.202 557.265,48.314 555.606,258.642 545.888,280.000 45.916,280.000" fill="#3D6117" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>TeX: 75.8%</title></polygon>
-<text x="289.84" y="148.08" text-anchor="middle" fill="#f4f7ff" font-size="12" font-weight="700">TeX</text>
-<text x="289.84" y="165.08" text-anchor="middle" fill="#f4f7ff" font-size="11" opacity="0.7">75.8%</text>
-<polygon points="555.606,258.642 557.265,48.314 622.829,16.000 691.292,16.000 716.000,29.177 716.000,280.000 590.469,280.000" fill="#DA5B0B" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Jupyter Notebook: 21.9%</title></polygon>
-<text x="638.07" y="150.81" text-anchor="middle" fill="#f4f7ff" font-size="12" font-weight="700">Jupyter Notebook</text>
-<text x="638.07" y="167.81" text-anchor="middle" fill="#f4f7ff" font-size="11" opacity="0.7">21.9%</text>
-<polygon points="557.265,48.314 554.282,41.202 557.468,16.000 622.829,16.000" fill="#3178c6" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>TypeScript: 0.6%</title></polygon>
-<polygon points="16.000,206.246 45.916,280.000 16.000,280.000" fill="#f1e05a" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>JavaScript: 0.6%</title></polygon>
-<polygon points="39.466,31.804 16.000,95.953 16.000,25.174" fill="#3572a5" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Python: 0.4%</title></polygon>
-<polygon points="555.606,258.642 590.469,280.000 545.888,280.000" fill="#b07219" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Java: 0.3%</title></polygon>
-<polygon points="39.466,31.804 16.000,25.174 16.000,16.000 47.154,16.000" fill="#da291c" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>PostScript: 0.2%</title></polygon>
-<polygon points="554.282,41.202 542.284,16.000 557.468,16.000" fill="#e34c26" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>HTML: 0.1%</title></polygon>
-<polygon points="691.292,16.000 716.000,16.000 716.000,29.177" fill="#7c86b8" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Other: &lt;0.1%</title></polygon>
+<polygon points="16.000,206.297 16.000,95.894 39.442,31.791 47.119,16.000 542.605,16.000 554.596,41.207 557.547,48.245 555.886,258.677 546.189,280.000 45.883,280.000" fill="#3D6117" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>TeX: 75.8%</title></polygon>
+<text x="289.97" y="148.08" text-anchor="middle" fill="#f4f7ff" font-size="12" font-weight="700">TeX</text>
+<text x="289.97" y="165.08" text-anchor="middle" fill="#f4f7ff" font-size="11" opacity="0.7">75.8%</text>
+<polygon points="555.886,258.677 557.547,48.245 623.175,16.000 691.289,16.000 716.000,29.152 716.000,280.000 590.765,280.000" fill="#DA5B0B" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Jupyter Notebook: 21.9%</title></polygon>
+<text x="638.21" y="150.82" text-anchor="middle" fill="#f4f7ff" font-size="12" font-weight="700">Jupyter Notebook</text>
+<text x="638.21" y="167.82" text-anchor="middle" fill="#f4f7ff" font-size="11" opacity="0.7">21.9%</text>
+<polygon points="557.547,48.245 554.596,41.207 557.759,16.000 623.175,16.000" fill="#3178c6" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>TypeScript: 0.6%</title></polygon>
+<polygon points="16.000,206.297 45.883,280.000 16.000,280.000" fill="#f1e05a" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>JavaScript: 0.6%</title></polygon>
+<polygon points="39.442,31.791 16.000,95.894 16.000,25.170" fill="#3572a5" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Python: 0.4%</title></polygon>
+<polygon points="555.886,258.677 590.765,280.000 546.189,280.000" fill="#b07219" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Java: 0.3%</title></polygon>
+<polygon points="39.442,31.791 16.000,25.170 16.000,16.000 47.119,16.000" fill="#da291c" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>PostScript: 0.2%</title></polygon>
+<polygon points="554.596,41.207 542.605,16.000 557.759,16.000" fill="#e34c26" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>HTML: 0.1%</title></polygon>
+<polygon points="691.289,16.000 716.000,16.000 716.000,29.152" fill="#7c86b8" fill-opacity="0.85" stroke="#0b0f16" stroke-width="2"><title>Other: &lt;0.1%</title></polygon>
 </g>
 <g id="legend">
 <text x="748" y="24" font-size="10" fill="#7c86b8" letter-spacing="4">BY AREA</text>
